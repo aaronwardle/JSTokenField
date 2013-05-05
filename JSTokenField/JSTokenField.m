@@ -133,6 +133,12 @@ NSString *const JSDeletedTokenKey = @"JSDeletedTokenKey";
         token.parentField = self;
 		[_tokens addObject:token];
 		
+        if (self.tokensLimit) {
+            self.textField.userInteractionEnabled = self.tokens.count < self.tokensLimit;
+        } else {
+            self.textField.userInteractionEnabled = TRUE;
+        }
+        
 		if ([self.delegate respondsToSelector:@selector(tokenField:didAddToken:representedObject:)])
 		{
 			[self.delegate tokenField:self didAddToken:aString representedObject:obj];
@@ -159,6 +165,13 @@ NSString *const JSDeletedTokenKey = @"JSDeletedTokenKey";
         [[tokenToRemove retain] autorelease]; // removing it from the array will dealloc the object, but we want to keep it around for the delegate method below
         
         [_tokens removeObject:tokenToRemove];
+        
+        if (self.tokensLimit) {
+            self.textField.userInteractionEnabled = self.tokens.count < self.tokensLimit;
+        } else {
+            self.textField.userInteractionEnabled = TRUE;
+        }
+        
         if ([self.delegate respondsToSelector:@selector(tokenField:didRemoveToken:representedObject:)])
         {
 				NSString *tokenName = [tokenToRemove titleForState:UIControlStateNormal];
@@ -213,6 +226,12 @@ NSString *const JSDeletedTokenKey = @"JSDeletedTokenKey";
 			[_deletedToken removeFromSuperview];
 			[_tokens removeObject:_deletedToken];
 			
+            if (self.tokensLimit) {
+                self.textField.userInteractionEnabled = self.tokens.count < self.tokensLimit;
+            } else {
+                self.textField.userInteractionEnabled = TRUE;
+            }
+            
 			if ([self.delegate respondsToSelector:@selector(tokenField:didRemove:representedObject:)])
 			{
 				[self.delegate tokenField:self didRemoveToken:tokenName representedObject:_deletedToken.representedObject];
