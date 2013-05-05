@@ -232,7 +232,7 @@ NSString *const JSDeletedTokenKey = @"JSDeletedTokenKey";
                 self.textField.userInteractionEnabled = TRUE;
             }
             
-			if ([self.delegate respondsToSelector:@selector(tokenField:didRemove:representedObject:)])
+			if ([self.delegate respondsToSelector:@selector(tokenField:didRemoveToken:representedObject:)])
 			{
 				[self.delegate tokenField:self didRemoveToken:tokenName representedObject:_deletedToken.representedObject];
 			}
