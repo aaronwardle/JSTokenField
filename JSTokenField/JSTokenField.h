@@ -31,9 +31,6 @@
 
 @protocol JSTokenFieldDelegate;
 
-extern NSString *const JSTokenFieldFrameDidChangeNotification;
-extern NSString *const JSTokenFieldNewFrameKey;
-extern NSString *const JSTokenFieldOldFrameKey;
 extern NSString *const JSDeletedTokenKey;
 
 @interface JSTokenField : UIView <UITextFieldDelegate> {
@@ -52,6 +49,8 @@ extern NSString *const JSDeletedTokenKey;
 @property (nonatomic, readonly, copy) NSMutableArray *tokens;
 @property (nonatomic) NSUInteger tokensLimit; // Default 0;
 @property (nonatomic, weak) id <JSTokenFieldDelegate> delegate;
+
++ (CGFloat)heightWithTokens:(NSArray *)tokens title:(NSString *)title constrainedToWidth:(CGFloat)width;
 
 - (void)addTokenWithTitle:(NSString *)string representedObject:(id)obj;
 - (void)removeTokenForString:(NSString *)string;

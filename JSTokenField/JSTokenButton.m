@@ -44,8 +44,8 @@
 	[button setNormalBg:[[UIImage imageNamed:@"tokenNormal.png"] stretchableImageWithLeftCapWidth:14 topCapHeight:0]];
 	[button setHighlightedBg:[[UIImage imageNamed:@"tokenHighlighted.png"] stretchableImageWithLeftCapWidth:14 topCapHeight:0]];
 	[button setAdjustsImageWhenHighlighted:NO];
-	[button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-	[[button titleLabel] setFont:[UIFont fontWithName:@"Helvetica Neue" size:15]];
+	[button setTitleColor:[UIColor colorWithWhite:51.0/255.0 alpha:1.0] forState:UIControlStateNormal];
+	[[button titleLabel] setFont:[UIFont systemFontOfSize:[UIFont systemFontSize]]];
 	[[button titleLabel] setLineBreakMode:NSLineBreakByTruncatingTail];
 	[button setTitleEdgeInsets:UIEdgeInsetsMake(2, 10, 0, 10)];
 	
