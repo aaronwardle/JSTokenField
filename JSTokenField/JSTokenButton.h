@@ -29,6 +29,9 @@
 #import <UIKit/UIKit.h>
 @class JSTokenField;
 
+extern CGFloat const kTokenFieldButtonTitleHorizontalPadding;
+extern CGFloat const kTokenFieldButtonHeight;
+
 @interface JSTokenButton : UIButton <UIKeyInput> {
 
 	BOOL _toggled;

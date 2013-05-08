@@ -30,6 +30,9 @@
 #import "JSTokenField.h"
 #import <QuartzCore/QuartzCore.h>
 
+CGFloat const kTokenFieldButtonTitleHorizontalPadding = 8.0f;
+CGFloat const kTokenFieldButtonHeight = 25.0f;
+
 @implementation JSTokenButton
 
 @synthesize toggled = _toggled;
@@ -47,14 +50,14 @@
 	[button setTitleColor:[UIColor colorWithWhite:51.0/255.0 alpha:1.0] forState:UIControlStateNormal];
 	[[button titleLabel] setFont:[UIFont systemFontOfSize:[UIFont systemFontSize]]];
 	[[button titleLabel] setLineBreakMode:NSLineBreakByTruncatingTail];
-	[button setTitleEdgeInsets:UIEdgeInsetsMake(2, 10, 0, 10)];
+	[button setTitleEdgeInsets:UIEdgeInsetsMake(0, kTokenFieldButtonTitleHorizontalPadding, 0, kTokenFieldButtonTitleHorizontalPadding)];
 	
 	[button setTitle:string forState:UIControlStateNormal];
 	
 	[button sizeToFit];
 	CGRect frame = [button frame];
-	frame.size.width += 20;
-	frame.size.height = 25;
+	frame.size.width += (kTokenFieldButtonTitleHorizontalPadding*2);
+	frame.size.height = kTokenFieldButtonHeight;
 	[button setFrame:frame];
 	
 	[button setToggled:NO];

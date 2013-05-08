@@ -33,8 +33,13 @@
 
 NSString *const JSDeletedTokenKey = @"JSDeletedTokenKey";
 
+CGSize const kTokenFieldTextFieldMinSize = {60.0f, 29.0f}; // to fit the add contact button in the right view
+CGFloat const kTokenFieldTextFieldPadding = 6.0f; // horizontal space between a token and the textfield
+CGFloat const kTokenFieldTokenHorizontalSpacing = 6.0f; // horizontal space between tokens
+CGFloat const kTokenFieldTokenVerticalSpacing = 10.0f; // vertical space between tokens
+
 #define HORIZONTAL_SPACING 6
-#define VERTICAL_SPACING 3
+#define VERTICAL_SPACING 10
 #define HEIGHT_PADDING 3
 #define MIN_TEXTFIELD_WIDTH 60
 
@@ -54,41 +59,41 @@ NSString *const JSDeletedTokenKey = @"JSDeletedTokenKey";
 @synthesize label = _label;
 
 + (CGFloat)heightWithTokens:(NSArray *)tokens title:(NSString *)title constrainedToWidth:(CGFloat)width
-{    
-    CGSize titleSize = [title sizeWithFont:[UIFont systemFontOfSize:[UIFont systemFontSize]+1]                      
+{
+    CGSize titleSize = [title sizeWithFont:[UIFont systemFontOfSize:[UIFont labelFontSize]]
                                   forWidth:width/2.0f
                              lineBreakMode:NSLineBreakByTruncatingMiddle];
     
     CGFloat availableWidth;
-    CGFloat left = titleSize.width + HORIZONTAL_SPACING;
+    CGFloat left = titleSize.width;
     CGFloat top = 0;
     
     CGFloat maxTokenHeight = 0;
     
     for (UIButton *token in tokens) {
+        left += kTokenFieldTokenHorizontalSpacing;
         availableWidth = width - left;
 
         CGSize tokenSize = token.frame.size;
         
         if (token.frame.size.height > maxTokenHeight) maxTokenHeight = token.frame.size.height;
         if (!(!left || tokenSize.width <= availableWidth)) {
-            top += tokenSize.height + VERTICAL_SPACING;
+            top += tokenSize.height + kTokenFieldTokenVerticalSpacing;
             left = 0;
             maxTokenHeight = token.frame.size.height;
         }
-        left += tokenSize.width + HORIZONTAL_SPACING;
+        left += tokenSize.width;
     }
+    
+    left += kTokenFieldTokenHorizontalSpacing;
+    left += kTokenFieldTextFieldPadding;
     
     availableWidth = width - left;
-    if (!(!left || MIN_TEXTFIELD_WIDTH <= availableWidth)) {
-        top += maxTokenHeight + VERTICAL_SPACING + HEIGHT_PADDING;
-        left = 0;
-        availableWidth = width;
+    if (!(!left || kTokenFieldTextFieldMinSize.width <= availableWidth)) {
+        top += maxTokenHeight + kTokenFieldTokenVerticalSpacing;
     }
     
-    CGSize textFieldSize = [@"Ag" sizeWithFont:[UIFont systemFontOfSize:[UIFont systemFontSize]]];
-
-    return MAX(25.0f,top + HEIGHT_PADDING + textFieldSize.height + 1);
+    return top + kTokenFieldTextFieldMinSize.height;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -114,13 +119,10 @@ NSString *const JSDeletedTokenKey = @"JSDeletedTokenKey";
     _label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, frame.size.height)];
     [_label setBackgroundColor:[UIColor clearColor]];
     [_label setTextColor:[UIColor colorWithRed:180.0/255.0 green:180.0/255.0 blue:180.0/255.0 alpha:1.0f]];
-    [_label setFont:[UIFont systemFontOfSize:[UIFont systemFontSize]+1]];
+    [_label setFont:[UIFont systemFontOfSize:[UIFont labelFontSize]]];
     [_label setLineBreakMode:NSLineBreakByTruncatingMiddle];
     
     [self addSubview:_label];
-    
-    //		self.layer.borderColor = [[UIColor blueColor] CGColor];
-    //		self.layer.borderWidth = 1.0;
     
     _tokens = [[NSMutableArray alloc] init];
     _textField = [[JSBackspaceReportingTextField alloc] initWithFrame:frame];
@@ -129,10 +131,7 @@ NSString *const JSDeletedTokenKey = @"JSDeletedTokenKey";
     [_textField setBorderStyle:UITextBorderStyleNone];
     [_textField setBackground:nil];
     [_textField setBackgroundColor:[UIColor clearColor]];
-    [_textField setContentVerticalAlignment:UIControlContentVerticalAlignmentBottom];
-    
-    //		[_textField.layer setBorderColor:[[UIColor redColor] CGColor]];
-    //		[_textField.layer setBorderWidth:1.0];
+    [_textField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
     
     [self addSubview:_textField];
     
@@ -269,43 +268,45 @@ NSString *const JSDeletedTokenKey = @"JSDeletedTokenKey";
 
 - (void)layoutSubviews
 {
-    CGSize labelSize = [self.label sizeThatFits:CGSizeMake(self.bounds.size.width/2.0f, self.bounds.size.height)];
+    CGSize labelSize = [self.label sizeThatFits:CGSizeMake(self.bounds.size.width/2.0f, kTokenFieldTextFieldMinSize.height)];
 	
-    self.label.frame = CGRectMake(0, HEIGHT_PADDING, labelSize.width, labelSize.height);
+    CGFloat alignPadding = ABS(self.textField.font.pointSize - self.label.font.pointSize)-1;
+    
+    self.label.frame = CGRectMake(0, alignPadding, labelSize.width, labelSize.height);
     
     CGFloat availableWidth;
-    CGFloat left = labelSize.width + HORIZONTAL_SPACING;
+    CGFloat left = labelSize.width;
     CGFloat top = 0;
     
     CGFloat maxTokenHeight = 0;
     
     for (UIButton *token in self.tokens) {
+        left += kTokenFieldTokenHorizontalSpacing;
         availableWidth = self.bounds.size.width - left;
         
         if (token.frame.size.height > maxTokenHeight) maxTokenHeight = token.frame.size.height;
         if (!(!left || token.frame.size.width <= availableWidth)) {
-            top += token.frame.size.height + VERTICAL_SPACING;
+            top += token.frame.size.height + kTokenFieldTokenVerticalSpacing;
             left = 0;
             maxTokenHeight = token.frame.size.height;
         }
         
-        token.frame = CGRectMake(left, top, MIN(token.width,self.bounds.size.width), token.frame.size.height);
+        token.frame = CGRectMake(left, top + alignPadding, MIN(token.width,self.bounds.size.width), token.frame.size.height);
         
-        left += token.frame.size.width + HORIZONTAL_SPACING;
-    }
-    
-    availableWidth = self.bounds.size.width - left;
-    if (!(!left || MIN_TEXTFIELD_WIDTH <= availableWidth)) {
-        top += maxTokenHeight + VERTICAL_SPACING;
-        left = 0;
-        availableWidth = self.bounds.size.width;
+        left += token.frame.size.width;
     }
 
-    //CGFloat height = self.label.frame.origin.y + self.label.frame.size.height;
+    left += kTokenFieldTokenHorizontalSpacing;
+    left += kTokenFieldTextFieldPadding;
     
-    CGSize textFieldSize = [@"Ag" sizeWithFont:[UIFont systemFontOfSize:[UIFont systemFontSize]]];
+    availableWidth = self.bounds.size.width - left;
+    if (!(!left || kTokenFieldTextFieldMinSize.width <= availableWidth)) {
+        top += maxTokenHeight + kTokenFieldTokenVerticalSpacing;
+        left = kTokenFieldTextFieldPadding;
+        availableWidth = self.bounds.size.width - left;
+    }
     
-    self.textField.frame = CGRectMake(left, top+1, availableWidth, textFieldSize.height + HEIGHT_PADDING);
+    self.textField.frame = CGRectMake(left, top, availableWidth, kTokenFieldTextFieldMinSize.height);
 }
 
 

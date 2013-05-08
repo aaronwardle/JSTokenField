@@ -33,6 +33,14 @@
 
 extern NSString *const JSDeletedTokenKey;
 
+extern CGSize const kTokenFieldTextFieldMinSize;
+extern CGFloat const kTokenFieldTextFieldPadding;
+extern CGFloat const kTokenFieldTokenHorizontalSpacing;
+extern CGFloat const kTokenFieldTokenVerticalSpacing;
+
+// Metrics
+extern CGFloat const kTokenFieldVerticalPadding;
+
 @interface JSTokenField : UIView <UITextFieldDelegate> {
 	
 	NSMutableArray *_tokens;
