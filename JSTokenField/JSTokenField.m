@@ -142,6 +142,10 @@ CGFloat const kTokenFieldTokenVerticalSpacing = 10.0f; // vertical space between
 {
 	NSString *aString = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
+ 	if (![self doesTokenAlreadyExist:aString] == NO) {
+        	return;
+    	}   
+    
 	if ([aString length])
 	{
 		JSTokenButton *token = [self tokenWithString:aString representedObject:obj];
@@ -219,6 +223,16 @@ CGFloat const kTokenFieldTokenVerticalSpacing = 10.0f; // vertical space between
 			return token == button;
 		}];
 	}
+}
+
+- (BOOL)doesTokenAlreadyExist:(NSString *)tokenString {
+    NSArray *tokensCopy = [_tokens copy];
+    for (JSTokenButton *button in tokensCopy) {
+        if ([button.titleLabel.text isEqualToString:tokenString]) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (void)deleteHighlightedToken
