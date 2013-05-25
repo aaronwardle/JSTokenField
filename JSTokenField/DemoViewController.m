@@ -119,10 +119,10 @@
 
 }
 
-- (void)tokenField:(JSTokenField *)tokenField didRemoveTokenAtIndex:(NSUInteger)index
+- (void)tokenField:(JSTokenField *)tokenField didRemoveToken:(NSString *)title representedObject:(id)obj {
 {	
-	[_toRecipients removeObjectAtIndex:index];
-	NSLog(@"Deleted token %d\n%@", index, _toRecipients);
+	[_toRecipients removeObject:obj];
+	NSLog(@"Deleted token %@\n%@", title, obj);
 }
 
 - (BOOL)tokenFieldShouldReturn:(JSTokenField *)tokenField {
